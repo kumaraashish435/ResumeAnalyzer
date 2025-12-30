@@ -1,0 +1,139 @@
+@{
+    ViewData["Title"] = "Resume Matching Dashboard";
+    var resumes = ViewBag.Resumes as IEnumerable<ResumeAnalyzer.Application.DTOs.ResumeDto> ?? new List<ResumeAnalyzer.Application.DTOs.ResumeDto>();
+    var jobs = ViewBag.Jobs as IEnumerable<ResumeAnalyzer.Application.DTOs.JobDescriptionDto> ?? new List<ResumeAnalyzer.Application.DTOs.JobDescriptionDto>();
+}
+
+<div class="container mt-4">
+    <h2>Resume Matching Dashboard</h2>
+    <hr />
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Actions</h5>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a asp-controller="Resume" asp-action="Upload" class="btn btn-primary">Upload Resume</a>
+                        <a asp-controller="JobDescription" asp-action="Create" class="btn btn-success">Create Job Description</a>
+                        <a asp-controller="Resume" asp-action="Index" class="btn btn-info">View All Resumes</a>
+                        <a asp-controller="JobDescription" asp-action="Index" class="btn btn-info">View All Jobs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Resumes (@resumes.Count())</h5>
+                </div>
+                <div class="card-body">
+                    @if (resumes.Any())
+                    {
+                        <div class="list-group">
+                            @foreach (var resume in resumes)
+                            {
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>@resume.FileName</strong>
+                                            <br />
+                                            <small class="text-muted">
+                                                @resume.Skills.Count skills • Uploaded @resume.UploadedAt.ToString("MMM dd, yyyy")
+                                            </small>
+                                        </div>
+                                        <a asp-action="MatchResumeToAll" asp-route-resumeId="@resume.Id" class="btn btn-sm btn-primary">Match to All Jobs</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No resumes available. <a asp-controller="Resume" asp-action="Upload">Upload a resume</a> to get started.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Job Descriptions (@jobs.Count())</h5>
+                </div>
+                <div class="card-body">
+                    @if (jobs.Any())
+                    {
+                        <div class="list-group">
+                            @foreach (var job in jobs)
+                            {
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>@job.JobTitle</strong>
+                                            <br />
+                                            <small class="text-muted">
+                                                @job.Company • @job.RequiredSkills.Count skills
+                                            </small>
+                                        </div>
+                                        <a asp-action="MatchAllToJob" asp-route-jobDescriptionId="@job.Id" class="btn btn-sm btn-success">Match All Resumes</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No job descriptions available. <a asp-controller="JobDescription" asp-action="Create">Create a job description</a> to get started.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (resumes.Any() && jobs.Any())
+    {
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Manual Matching</h5>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="Match" method="post" class="row g-3">
+                            @Html.AntiForgeryToken()
+                            <div class="col-md-5">
+                                <label class="form-label">Select Resume</label>
+                                <select name="resumeId" class="form-select" required>
+                                    <option value="">-- Select Resume --</option>
+                                    @foreach (var resume in resumes)
+                                    {
+                                        <option value="@resume.Id">@resume.FileName</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label">Select Job</label>
+                                <select name="jobDescriptionId" class="form-select" required>
+                                    <option value="">-- Select Job --</option>
+                                    @foreach (var job in jobs)
+                                    {
+                                        <option value="@job.Id">@job.JobTitle - @job.Company</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">&nbsp;</label>
+                                <button type="submit" class="btn btn-primary w-100">Match</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

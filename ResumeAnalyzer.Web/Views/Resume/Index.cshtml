@@ -1,0 +1,94 @@
+@model IEnumerable<ResumeAnalyzer.Application.DTOs.ResumeDto>
+@{
+    ViewData["Title"] = "Resumes";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>My Resumes</h2>
+        <a asp-action="Upload" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Upload New Resume
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Size</th>
+                        <th>Skills</th>
+                        <th>Uploaded</th>
+                        <th>Processed</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var resume in Model)
+                    {
+                        <tr>
+                            <td>@resume.FileName</td>
+                            <td>@(resume.FileSize / 1024) KB</td>
+                            <td>
+                                @if (resume.Skills.Any())
+                                {
+                                    <div class="d-flex flex-wrap gap-1">
+                                        @foreach (var skill in resume.Skills.Take(5))
+                                        {
+                                            <span class="badge bg-secondary">@skill</span>
+                                        }
+                                        @if (resume.Skills.Count > 5)
+                                        {
+                                            <span class="badge bg-light text-dark">+@(resume.Skills.Count - 5) more</span>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No skills detected</span>
+                                }
+                            </td>
+                            <td>@resume.UploadedAt.ToString("MMM dd, yyyy HH:mm")</td>
+                            <td>@(resume.ProcessedAt?.ToString("MMM dd, yyyy HH:mm") ?? "Not processed")</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@resume.Id" class="btn btn-sm btn-info">View</a>
+                                <a asp-controller="Matching" asp-action="MatchResumeToAll" asp-route-resumeId="@resume.Id" class="btn btn-sm btn-success">Match</a>
+                                <form asp-action="Delete" asp-route-id="@resume.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this resume?');">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <h5>No resumes found</h5>
+            <p>Upload your first resume to get started!</p>
+            <a asp-action="Upload" class="btn btn-primary">Upload Resume</a>
+        </div>
+    }
+</div>
+

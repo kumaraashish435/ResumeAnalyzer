@@ -1,0 +1,73 @@
+@model ResumeAnalyzer.Application.DTOs.ResumeUploadDto
+@{
+    ViewData["Title"] = "Upload Resume";
+}
+
+<div class="container mt-4">
+    <h2>Upload Resume</h2>
+    <hr />
+
+    @if (ViewData.ModelState.ErrorCount > 0)
+    {
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="Upload" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label asp-for="UserId" class="form-label">User ID</label>
+                    <input asp-for="UserId" class="form-control" value="1" />
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                    <small class="form-text text-muted">Demo: Use User ID 1</small>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="File" class="form-label">Select PDF Resume</label>
+                    <input asp-for="File" type="file" class="form-control" accept=".pdf" required />
+                    <span asp-validation-for="File" class="text-danger"></span>
+                    <small class="form-text text-muted">Only PDF files are allowed. Maximum file size: 10MB</small>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-upload"></i> Upload and Process Resume
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Instructions</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><strong>Supported Format:</strong> PDF only</li>
+                        <li><strong>File Size:</strong> Up to 10MB</li>
+                        <li><strong>Processing:</strong> The system will:</li>
+                        <li>• Extract text from PDF</li>
+                        <li>• Identify skills</li>
+                        <li>• Store for matching</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

@@ -1,0 +1,58 @@
+@model ResumeAnalyzer.Application.DTOs.JobDescriptionDto
+@{
+    ViewData["Title"] = "Job Description Details";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Job Description Details</h2>
+        <div>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <a asp-controller="Matching" asp-action="MatchAllToJob" asp-route-jobDescriptionId="@Model.Id" class="btn btn-primary">Match Resumes</a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header">
+            <h4>@Model.JobTitle</h4>
+            <div class="mt-2">
+                <span class="badge bg-info">@Model.Company</span>
+                @if (!string.IsNullOrEmpty(Model.Location))
+                {
+                    <span class="badge bg-secondary"><i class="bi bi-geo-alt"></i> @Model.Location</span>
+                }
+            </div>
+        </div>
+        <div class="card-body">
+            <dl class="row mb-4">
+                <dt class="col-sm-3">Created:</dt>
+                <dd class="col-sm-9">@Model.CreatedAt.ToString("MMMM dd, yyyy HH:mm:ss")</dd>
+            </dl>
+
+            <h5>Description</h5>
+            <div class="mb-4">
+                <p style="white-space: pre-wrap;">@Model.Description</p>
+            </div>
+
+            @if (Model.RequiredSkills.Any())
+            {
+                <h5>Required Skills (@Model.RequiredSkills.Count)</h5>
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                    @foreach (var skill in Model.RequiredSkills)
+                    {
+                        <span class="badge bg-primary" style="font-size: 1em; padding: 0.5em 1em;">@skill</span>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

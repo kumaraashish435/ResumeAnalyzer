@@ -1,0 +1,134 @@
+@model ResumeAnalyzer.Application.DTOs.MatchingResultDto
+@{
+    ViewData["Title"] = "Matching Result";
+    var matchColor = Model.MatchPercentage >= 80 ? "success" : Model.MatchPercentage >= 60 ? "warning" : "danger";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Matching Result</h2>
+        <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Match Score Card -->
+            <div class="card mb-4">
+                <div class="card-header bg-@matchColor text-white">
+                    <h4 class="mb-0">Match Score: @Model.MatchPercentage.ToString("F2")%</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Resume</h5>
+                            <p><strong>@Model.ResumeFileName</strong></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Job Position</h5>
+                            <p><strong>@Model.JobTitle</strong><br />
+                            <small class="text-muted">@Model.Company</small></p>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h3 class="text-primary">@Model.MatchPercentage.ToString("F1")%</h3>
+                                <small class="text-muted">Overall Match</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h3 class="text-info">@(Model.CosineSimilarityScore * 100).ToString("F1")%</h3>
+                                <small class="text-muted">Text Similarity (TF-IDF)</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h3 class="text-success">@Model.MatchingSkillsCount / @Model.TotalJobSkillsCount</h3>
+                                <small class="text-muted">Skills Matched</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h3 class="text-warning">@Model.SkillMatchScore.ToString("F1")%</h3>
+                                <small class="text-muted">Skill Match Score</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <strong>Matched At:</strong> @Model.MatchedAt.ToString("MMMM dd, yyyy HH:mm:ss")
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Analysis -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5>Matching Skills (@Model.MatchingSkills.Count)</h5>
+                        </div>
+                        <div class="card-body">
+                            @if (Model.MatchingSkills.Any())
+                            {
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach (var skill in Model.MatchingSkills)
+                                    {
+                                        <span class="badge bg-success" style="font-size: 1em; padding: 0.5em 1em;">✓ @skill</span>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-muted">No matching skills found</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-danger text-white">
+                            <h5>Missing Skills (@Model.MissingSkills.Count)</h5>
+                        </div>
+                        <div class="card-body">
+                            @if (Model.MissingSkills.Any())
+                            {
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach (var skill in Model.MissingSkills)
+                                    {
+                                        <span class="badge bg-danger" style="font-size: 1em; padding: 0.5em 1em;">✗ @skill</span>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-success">All required skills are present!</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Algorithm Explanation -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>How the Match Score is Calculated</h5>
+                </div>
+                <div class="card-body">
+                    <p>The match score combines two factors:</p>
+                    <ul>
+                        <li><strong>Text Similarity (60% weight):</strong> Uses TF-IDF vectorization and cosine similarity to measure semantic similarity between resume and job description</li>
+                        <li><strong>Skill Overlap (40% weight):</strong> Calculates the percentage of required job skills found in the resume</li>
+                    </ul>
+                    <p class="mb-0"><strong>Final Score = (Cosine Similarity × 0.6) + (Skill Match × 0.4) × 100</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

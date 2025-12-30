@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "AI Resume Analyzer";
+}
+
+<div class="text-center">
+    <h1 class="display-4 mb-4">AI Resume Analyzer</h1>
+    <p class="lead mb-5">Intelligent resume matching system powered by TF-IDF and cosine similarity</p>
+
+    <div class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">📄 Upload Resumes</h3>
+                    <p class="card-text">Upload PDF resumes and let our AI extract skills automatically using NLP techniques.</p>
+                    <a asp-controller="Resume" asp-action="Upload" class="btn btn-primary">Upload Resume</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">💼 Create Jobs</h3>
+                    <p class="card-text">Define job descriptions with required skills to match against candidate resumes.</p>
+                    <a asp-controller="JobDescription" asp-action="Create" class="btn btn-success">Create Job</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">🎯 Match Resumes</h3>
+                    <p class="card-text">Get AI-powered match scores using TF-IDF vectorization and cosine similarity.</p>
+                    <a asp-controller="Matching" asp-action="Index" class="btn btn-info">Match Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>How It Works</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h5>1. PDF Extraction</h5>
+                            <p>Extract text from PDF resumes using PdfPig library</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>2. Text Preprocessing</h5>
+                            <p>Clean, tokenize, and remove stop words from text</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>3. Skill Extraction</h5>
+                            <p>Identify candidate skills using dictionary matching</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>4. AI Matching</h5>
+                            <p>Calculate similarity using TF-IDF and cosine similarity</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                <h5>Technology Stack</h5>
+                <p class="mb-0">
+                    Built with ASP.NET Core MVC, Entity Framework Core, ML.NET (TF-IDF), 
+                    PdfPig for PDF processing, and SQL Server/SQLite database.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

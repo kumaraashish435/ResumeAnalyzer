@@ -1,0 +1,65 @@
+@model ResumeAnalyzer.Application.DTOs.ResumeDto
+@{
+    ViewData["Title"] = "Resume Details";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Resume Details</h2>
+        <div>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <a asp-controller="Matching" asp-action="MatchResumeToAll" asp-route-resumeId="@Model.Id" class="btn btn-primary">Match to Jobs</a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header">
+            <h5>@Model.FileName</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">File Name:</dt>
+                <dd class="col-sm-9">@Model.FileName</dd>
+
+                <dt class="col-sm-3">File Size:</dt>
+                <dd class="col-sm-9">@(Model.FileSize / 1024) KB</dd>
+
+                <dt class="col-sm-3">Uploaded By:</dt>
+                <dd class="col-sm-9">@Model.UserName</dd>
+
+                <dt class="col-sm-3">Uploaded At:</dt>
+                <dd class="col-sm-9">@Model.UploadedAt.ToString("MMMM dd, yyyy HH:mm:ss")</dd>
+
+                <dt class="col-sm-3">Processed At:</dt>
+                <dd class="col-sm-9">@(Model.ProcessedAt?.ToString("MMMM dd, yyyy HH:mm:ss") ?? "Not processed")</dd>
+
+                <dt class="col-sm-3">Extracted Skills:</dt>
+                <dd class="col-sm-9">
+                    @if (Model.Skills.Any())
+                    {
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var skill in Model.Skills)
+                            {
+                                <span class="badge bg-primary">@skill</span>
+                            }
+                        </div>
+                        <small class="text-muted">Total: @Model.Skills.Count skills detected</small>
+                    }
+                    else
+                    {
+                        <span class="text-muted">No skills detected</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+

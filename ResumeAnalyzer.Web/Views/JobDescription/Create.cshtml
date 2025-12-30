@@ -1,0 +1,80 @@
+@model ResumeAnalyzer.Application.DTOs.CreateJobDescriptionDto
+@{
+    ViewData["Title"] = "Create Job Description";
+}
+
+<div class="container mt-4">
+    <h2>Create Job Description</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="JobTitle" class="form-label">Job Title *</label>
+                    <input asp-for="JobTitle" class="form-control" placeholder="e.g., Senior Software Engineer" />
+                    <span asp-validation-for="JobTitle" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Company" class="form-label">Company</label>
+                    <input asp-for="Company" class="form-control" placeholder="Company name" />
+                    <span asp-validation-for="Company" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Location" class="form-label">Location</label>
+                    <input asp-for="Location" class="form-control" placeholder="e.g., New York, NY" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">Job Description *</label>
+                    <textarea asp-for="Description" class="form-control" rows="10" placeholder="Enter full job description, requirements, responsibilities, etc."></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                    <small class="form-text text-muted">Include all requirements, responsibilities, and preferred qualifications</small>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="RequiredSkills" class="form-label">Required Skills</label>
+                    <textarea asp-for="RequiredSkills" class="form-control" rows="4" placeholder="C#, Python, SQL, Azure, Machine Learning (comma or newline separated)"></textarea>
+                    <span asp-validation-for="RequiredSkills" class="text-danger"></span>
+                    <small class="form-text text-muted">Enter skills separated by commas or new lines</small>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Create Job Description</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Tips</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><strong>Job Description:</strong> Be detailed. Include:</li>
+                        <li>• Required qualifications</li>
+                        <li>• Key responsibilities</li>
+                        <li>• Technical requirements</li>
+                        <li>• Preferred experience</li>
+                        <li></li>
+                        <li><strong>Skills:</strong> List specific technologies, tools, and competencies</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

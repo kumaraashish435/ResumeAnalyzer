@@ -1,0 +1,84 @@
+@model IEnumerable<ResumeAnalyzer.Application.DTOs.JobDescriptionDto>
+@{
+    ViewData["Title"] = "Job Descriptions";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Job Descriptions</h2>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Create New Job
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var job in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">@job.JobTitle</h5>
+                            <span class="badge bg-info">@job.Company</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted mb-2">
+                                <i class="bi bi-geo-alt"></i> @job.Location
+                            </p>
+                            <p class="card-text">
+                                @(job.Description.Length > 150 ? job.Description.Substring(0, 150) + "..." : job.Description)
+                            </p>
+                            
+                            @if (job.RequiredSkills.Any())
+                            {
+                                <div class="mb-3">
+                                    <strong>Required Skills:</strong>
+                                    <div class="d-flex flex-wrap gap-1 mt-2">
+                                        @foreach (var skill in job.RequiredSkills)
+                                        {
+                                            <span class="badge bg-secondary">@skill</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="card-footer">
+                            <a asp-action="Details" asp-route-id="@job.Id" class="btn btn-sm btn-info">View Details</a>
+                            <a asp-controller="Matching" asp-action="MatchAllToJob" asp-route-jobDescriptionId="@job.Id" class="btn btn-sm btn-success">Match Resumes</a>
+                            <form asp-action="Delete" asp-route-id="@job.Id" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this job description?');">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <h5>No job descriptions found</h5>
+            <p>Create your first job description to start matching resumes!</p>
+            <a asp-action="Create" class="btn btn-primary">Create Job Description</a>
+        </div>
+    }
+</div>
+

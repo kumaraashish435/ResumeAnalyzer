@@ -2,11 +2,11 @@
 
 A comprehensive web-based AI Resume Analyzer system that matches candidate resumes with job descriptions using Natural Language Processing (NLP) techniques including TF-IDF vectorization and cosine similarity.
 
-## 🎯 Project Overview
+## Project Overview
 
 This system accepts PDF resumes, extracts text content, identifies candidate skills, matches resumes against job descriptions, and calculates match percentages using advanced AI/NLP algorithms.
 
-## 🏗️ Architecture
+## Architecture
 
 The project follows **Clean Architecture** principles with clear separation of concerns across multiple layers:
 
@@ -113,7 +113,7 @@ ResumeAnalyzer/
 - **Views:** Razor views for upload forms, dashboards, and result displays
 - **Configuration:** Dependency injection setup in `Program.cs`
 
-## 🗄️ Database Schema
+## Database Schema
 
 The system uses SQLite (for development) or SQL Server (for production) with the following schema:
 
@@ -132,7 +132,7 @@ The system uses SQLite (for development) or SQL Server (for production) with the
 - JobDescription → JobSkills → Skills (many:many)
 - Resume → MatchingResults ← JobDescription (many:many)
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - .NET 8 SDK or later
@@ -170,7 +170,7 @@ The system uses SQLite (for development) or SQL Server (for production) with the
 - Initial data will be seeded (default user, common skills)
 - You can start uploading resumes and creating job descriptions
 
-## 📋 Usage Instructions
+## Usage Instructions
 
 ### 1. Upload a Resume
 - Navigate to **Resumes → Upload Resume**
@@ -197,7 +197,7 @@ The system uses SQLite (for development) or SQL Server (for production) with the
   - Skill overlap percentage
   - Matching and missing skills
 
-## 🔐 Security Features
+## Security Features
 
 - **File Validation**: Only PDF files accepted, MIME type checking
 - **SQL Injection Protection**: Parameterized queries via EF Core
@@ -205,7 +205,7 @@ The system uses SQLite (for development) or SQL Server (for production) with the
 - **Input Validation**: Data annotations and model validation
 - **Anti-Forgery Tokens**: CSRF protection on form submissions
 
-## 🧪 Testing
+## Testing
 
 ### Sample Test Data
 The system seeds initial data including:
@@ -223,7 +223,7 @@ The system seeds initial data including:
 - **Match Precision**: TF-IDF + skill overlap provides balanced scoring
 - **Processing Time**: Typically < 2 seconds per resume upload/match
 
-## 📦 Technology Stack
+## Technology Stack
 
 - **.NET 8**: Core framework
 - **ASP.NET Core MVC**: Web framework
@@ -233,7 +233,7 @@ The system seeds initial data including:
 - **ML.NET**: NLP processing (TF-IDF implementation)
 - **Bootstrap 5**: UI framework
 
-## 📝 Key Features
+## Key Features
 
 ✅ PDF Resume Upload and Text Extraction  
 ✅ Automatic Skill Extraction  
@@ -247,7 +247,7 @@ The system seeds initial data including:
 ✅ Repository Pattern  
 ✅ Unit of Work Pattern  
 
-## 🎓 Educational Value
+## Educational Value
 
 This project demonstrates:
 - Clean Architecture principles
@@ -259,7 +259,7 @@ This project demonstrates:
 - ASP.NET Core MVC development
 - Database design and relationships
 
-## 📚 Mathematical Formulas
+## Mathematical Formulas
 
 ### Cosine Similarity
 ```
@@ -278,7 +278,7 @@ TF-IDF(t, d) = TF(t, d) × IDF(t)
 Match% = (Cosine Similarity × 0.6 + Skill Match × 0.4) × 100
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Database Connection
 Edit `appsettings.json` to change database:
@@ -297,7 +297,7 @@ Edit `appsettings.json` to change database:
 - Allowed extensions: .pdf only
 - Upload folder: `wwwroot/Uploads/Resumes`
 
-## 📖 Code Documentation
+## Code Documentation
 
 All code includes comprehensive XML documentation comments explaining:
 - What each component does
@@ -305,7 +305,7 @@ All code includes comprehensive XML documentation comments explaining:
 - How it works
 - Best practices used
 
-## 🤝 Contributing
+## Contributing
 
 This is an educational project. Feel free to:
 - Add more skills to the dictionary
@@ -318,7 +318,7 @@ This is an educational project. Feel free to:
 
 This project is for educational purposes.
 
-## 👨‍💻 Author
+## Author
 
 Built as a comprehensive example of a full-stack .NET application with AI/NLP capabilities, following industry best practices and clean architecture principles.
 
